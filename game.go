@@ -26,6 +26,10 @@ func (g Game) playerBWins() bool {
 	return isWin(g.playerBState)
 }
 
+func (g Game) isDraw() bool {
+	return g.playerAState+g.playerBState == 511
+}
+
 var errInvalidMove = errors.New("invalid move")
 
 func Move(game Game, move uint) (Game, error) {

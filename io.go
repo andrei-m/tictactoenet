@@ -51,6 +51,10 @@ func handleConn(gameNo int, conn net.Conn) {
 			fmt.Println("You lose!")
 			conn.Write([]byte("You win!"))
 			break
+		} else if game.isDraw() {
+			fmt.Println("It's a draw.")
+			conn.Write([]byte("It's a draw."))
+			break
 		}
 	}
 }

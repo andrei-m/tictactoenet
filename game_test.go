@@ -57,6 +57,29 @@ func Test_Move(t *testing.T) {
 	assert.False(t, game.playerBWins())
 }
 
+func Test_Game_isDraw(t *testing.T) {
+	game := Game{}
+	game, err := Move(game, 1)
+	assert.NoError(t, err)
+	game, err = Move(game, 2)
+	assert.NoError(t, err)
+	game, err = Move(game, 8)
+	assert.NoError(t, err)
+	game, err = Move(game, 64)
+	assert.NoError(t, err)
+	game, err = Move(game, 32)
+	assert.NoError(t, err)
+	game, err = Move(game, 256)
+	assert.NoError(t, err)
+	game, err = Move(game, 4)
+	assert.NoError(t, err)
+	game, err = Move(game, 128)
+	assert.NoError(t, err)
+	game, err = Move(game, 16)
+	assert.NoError(t, err)
+	assert.True(t, game.isDraw())
+}
+
 func Test_isValidMove(t *testing.T) {
 	t.Run("out of range", func(t *testing.T) {
 		assert.False(t, isValidMove(Game{}, 512))
