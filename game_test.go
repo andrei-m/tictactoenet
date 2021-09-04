@@ -10,51 +10,51 @@ func Test_Move(t *testing.T) {
 	game := Game{}
 	game, err := Move(game, 1)
 	assert.NoError(t, err)
-	assert.Equal(t, uint(1), game.playerAState)
-	assert.False(t, game.playerAWins())
-	assert.False(t, game.playerBWins())
+	assert.Equal(t, uint(1), game.playerXState)
+	assert.False(t, game.playerXWins())
+	assert.False(t, game.playerOWins())
 
 	game, err = Move(game, 2)
 	assert.NoError(t, err)
-	assert.Equal(t, uint(1), game.playerAState)
-	assert.Equal(t, uint(2), game.playerBState)
-	assert.False(t, game.playerAWins())
-	assert.False(t, game.playerBWins())
+	assert.Equal(t, uint(1), game.playerXState)
+	assert.Equal(t, uint(2), game.playerOState)
+	assert.False(t, game.playerXWins())
+	assert.False(t, game.playerOWins())
 
 	game, err = Move(game, 8)
 	assert.NoError(t, err)
-	assert.Equal(t, uint(9), game.playerAState)
-	assert.Equal(t, uint(2), game.playerBState)
-	assert.False(t, game.playerAWins())
-	assert.False(t, game.playerBWins())
+	assert.Equal(t, uint(9), game.playerXState)
+	assert.Equal(t, uint(2), game.playerOState)
+	assert.False(t, game.playerXWins())
+	assert.False(t, game.playerOWins())
 
 	game, err = Move(game, 64)
 	assert.NoError(t, err)
-	assert.Equal(t, uint(9), game.playerAState)
-	assert.Equal(t, uint(66), game.playerBState)
-	assert.False(t, game.playerAWins())
-	assert.False(t, game.playerBWins())
+	assert.Equal(t, uint(9), game.playerXState)
+	assert.Equal(t, uint(66), game.playerOState)
+	assert.False(t, game.playerXWins())
+	assert.False(t, game.playerOWins())
 
 	game, err = Move(game, 16)
 	assert.NoError(t, err)
-	assert.Equal(t, uint(25), game.playerAState)
-	assert.Equal(t, uint(66), game.playerBState)
-	assert.False(t, game.playerAWins())
-	assert.False(t, game.playerBWins())
+	assert.Equal(t, uint(25), game.playerXState)
+	assert.Equal(t, uint(66), game.playerOState)
+	assert.False(t, game.playerXWins())
+	assert.False(t, game.playerOWins())
 
 	game, err = Move(game, 128)
 	assert.NoError(t, err)
-	assert.Equal(t, uint(25), game.playerAState)
-	assert.Equal(t, uint(194), game.playerBState)
-	assert.False(t, game.playerAWins())
-	assert.False(t, game.playerBWins())
+	assert.Equal(t, uint(25), game.playerXState)
+	assert.Equal(t, uint(194), game.playerOState)
+	assert.False(t, game.playerXWins())
+	assert.False(t, game.playerOWins())
 
 	game, err = Move(game, 256)
 	assert.NoError(t, err)
-	assert.Equal(t, uint(281), game.playerAState)
-	assert.Equal(t, uint(194), game.playerBState)
-	assert.True(t, game.playerAWins())
-	assert.False(t, game.playerBWins())
+	assert.Equal(t, uint(281), game.playerXState)
+	assert.Equal(t, uint(194), game.playerOState)
+	assert.True(t, game.playerXWins())
+	assert.False(t, game.playerOWins())
 }
 
 func Test_Game_isDraw(t *testing.T) {
@@ -95,23 +95,23 @@ func Test_isValidMove(t *testing.T) {
 
 	t.Run("overlaps with player A", func(t *testing.T) {
 		game := Game{
-			playerAState: 36,
+			playerXState: 36,
 		}
 		assert.False(t, isValidMove(game, 4))
 	})
 
 	t.Run("overlaps with player B", func(t *testing.T) {
 		game := Game{
-			playerAState: 36,
-			playerBState: 9,
+			playerXState: 36,
+			playerOState: 9,
 		}
 		assert.False(t, isValidMove(game, 1))
 	})
 
 	t.Run("OK move", func(t *testing.T) {
 		game := Game{
-			playerAState: 36,
-			playerBState: 9,
+			playerXState: 36,
+			playerOState: 9,
 		}
 		assert.True(t, isValidMove(game, 2))
 	})

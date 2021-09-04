@@ -7,28 +7,28 @@ import (
 )
 
 type Game struct {
-	// when false, it is playerA's turn
-	playerBsTurn bool
+	// when false, it is playerX's turn
+	playerOsTurn bool
 	/*
 	   Each state uint represents placements on the board:
 	   1 2 4
 	   8 16 32
 	   64 128 256
 	*/
-	playerAState uint
-	playerBState uint
+	playerXState uint
+	playerOState uint
 }
 
-func (g Game) playerAWins() bool {
-	return isWin(g.playerAState)
+func (g Game) playerXWins() bool {
+	return isWin(g.playerXState)
 }
 
-func (g Game) playerBWins() bool {
-	return isWin(g.playerBState)
+func (g Game) playerOWins() bool {
+	return isWin(g.playerOState)
 }
 
 func (g Game) isDraw() bool {
-	return g.playerAState+g.playerBState == 511
+	return g.playerXState+g.playerOState == 511
 }
 
 func (g Game) String() string {
@@ -36,9 +36,9 @@ func (g Game) String() string {
 	for i := range state {
 		bit := 1 << i
 		uintBit := uint(bit)
-		if g.playerAState&uintBit == uintBit {
+		if g.playerXState&uintBit == uintBit {
 			state[i] = " X "
-		} else if g.playerBState&uintBit == uintBit {
+		} else if g.playerOState&uintBit == uintBit {
 			state[i] = " O "
 		} else {
 			state[i] = fmt.Sprintf("%3d", bit)
@@ -60,17 +60,17 @@ func Move(game Game, move uint) (Game, error) {
 	if !isValidMove(game, move) {
 		return Game{}, errInvalidMove
 	}
-	if game.playerBsTurn {
+	if game.playerOsTurn {
 		return Game{
-			playerBsTurn: false,
-			playerAState: game.playerAState,
-			playerBState: game.playerBState | move,
+			playerOsTurn: false,
+			playerXState: game.playerXState,
+			playerOState: game.playerOState | move,
 		}, nil
 	} else {
 		return Game{
-			playerBsTurn: true,
-			playerAState: game.playerAState | move,
-			playerBState: game.playerBState,
+			playerOsTurn: true,
+			playerXState: game.playerXState | move,
+			playerOState: game.playerOState,
 		}, nil
 	}
 }
@@ -80,7 +80,7 @@ func isValidMove(game Game, move uint) bool {
 		// must specify exactly one of the first 9 bits
 		return false
 	}
-	if game.playerAState&move > 0 || game.playerBState&move > 0 {
+	if game.playerXState&move > 0 || game.playerOState&move > 0 {
 		// space is taken
 		return false
 	}

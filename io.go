@@ -37,17 +37,17 @@ func handleConn(gameNo int, conn net.Conn) {
 	log.Printf("beginning game #%d", gameNo)
 	game := Game{}
 	for {
-		if game.playerBsTurn {
+		if game.playerOsTurn {
 			game = remoteMove(gameNo, game, conn)
 		} else {
 			game = localMove(gameNo, game)
 		}
 
-		if game.playerAWins() {
+		if game.playerXWins() {
 			fmt.Println("You win!")
 			conn.Write([]byte("You lose!"))
 			break
-		} else if game.playerBWins() {
+		} else if game.playerOWins() {
 			fmt.Println("You lose!")
 			conn.Write([]byte("You win!"))
 			break
