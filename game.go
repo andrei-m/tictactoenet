@@ -2,6 +2,7 @@ package tictactoenet
 
 import (
 	"errors"
+	"fmt"
 	"math/bits"
 )
 
@@ -28,6 +29,29 @@ func (g Game) playerBWins() bool {
 
 func (g Game) isDraw() bool {
 	return g.playerAState+g.playerBState == 511
+}
+
+func (g Game) String() string {
+	state := make([]interface{}, 9)
+	for i := range state {
+		bit := 1 << i
+		uintBit := uint(bit)
+		if g.playerAState&uintBit == uintBit {
+			state[i] = " X "
+		} else if g.playerBState&uintBit == uintBit {
+			state[i] = " O "
+		} else {
+			state[i] = fmt.Sprintf("%3d", bit)
+		}
+	}
+
+	return fmt.Sprintf(`
+%s|%s|%s
+-------------
+%s|%s|%s
+-------------
+%s|%s|%s
+`, state...)
 }
 
 var errInvalidMove = errors.New("invalid move")
