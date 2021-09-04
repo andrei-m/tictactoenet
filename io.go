@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/rand"
 	"net"
 	"os"
 	"strconv"
@@ -34,8 +35,11 @@ func Listen(port int) error {
 func handleConn(gameNo int, conn net.Conn) {
 	defer conn.Close()
 
-	log.Printf("beginning game #%d", gameNo)
 	game := Game{}
+	if rand.Intn(2) == 1 {
+		game.playerOsTurn = true
+	}
+	log.Printf("beginning game #%d ; Player %s goes first.", gameNo, game.playerTurn())
 	for {
 		if game.playerOsTurn {
 			game = remoteMove(gameNo, game, conn)
@@ -69,14 +73,10 @@ func remoteMove(gameNo int, game Game, conn net.Conn) Game {
 }
 
 func collectMove(gameNo int, game Game, in io.Reader, out io.Writer) Game {
-	turn := "X"
-	if game.playerOsTurn {
-		turn = "O"
-	}
 	scanner := bufio.NewScanner(in)
 	for {
 		io.WriteString(out, game.String())
-		io.WriteString(out, fmt.Sprintf("Game #%d move (player %s)> ", gameNo, turn))
+		io.WriteString(out, fmt.Sprintf("Game #%d move (player %s)> ", gameNo, game.playerTurn()))
 		if !scanner.Scan() {
 			continue
 		}

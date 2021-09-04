@@ -54,6 +54,13 @@ func (g Game) String() string {
 `, state...)
 }
 
+func (g Game) playerTurn() string {
+	if g.playerOsTurn {
+		return "O"
+	}
+	return "X"
+}
+
 var errInvalidMove = errors.New("invalid move")
 
 func Move(game Game, move uint) (Game, error) {
