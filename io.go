@@ -69,10 +69,14 @@ func remoteMove(gameNo int, game Game, conn net.Conn) Game {
 }
 
 func collectMove(gameNo int, game Game, in io.Reader, out io.Writer) Game {
+	turn := "X"
+	if game.playerOsTurn {
+		turn = "O"
+	}
 	scanner := bufio.NewScanner(in)
 	for {
 		io.WriteString(out, game.String())
-		io.WriteString(out, fmt.Sprintf("Game #%d move> ", gameNo))
+		io.WriteString(out, fmt.Sprintf("Game #%d move (player %s)> ", gameNo, turn))
 		if !scanner.Scan() {
 			continue
 		}
